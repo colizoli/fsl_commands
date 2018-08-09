@@ -6,6 +6,7 @@ It is not an exhaustive list, just the commands I have often needed and are not 
 
 See Fslutils: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Fslutils
 See Cluster: http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Cluster
+Typing 'fslmaths' and 'fslstats' into the terminal will show all possible options for these functions.
 
 Commands are after the '>>'
 
