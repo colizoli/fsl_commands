@@ -6,3 +6,5 @@ This repository is a list of some useful commands for extracting information fro
 See Fslutils: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Fslutils 
 <br>
 See Cluster: http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Cluster
+<br> <br>
+Typing 'fslmaths' and 'fslstats' into the terminal will show all possible options for these functions.
