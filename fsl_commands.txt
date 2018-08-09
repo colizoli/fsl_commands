@@ -1,0 +1,87 @@
+O.Colizoli, 9 Aug 2018
+Helpful terminal commands for FSL
+
+This repository is a list of some useful commands for extracting information from FSL output, transforming and filtering NIFTI images. It is not an exhaustive list, just the commands I have often needed and are not always obvious to find. 
+
+See Fslutils: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Fslutils
+See Cluster: http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Cluster
+
+Commands are after the '>>'
+
+How to remove volumes from somefile.nii.gz and remerge:
+>> fslsplit somefile.nii.gz
+>> rm vol0001 (example)
+>> fslmerge -t newfile.nii.gz vol*
+fslmerge -> t stands for merge in time, and vol* means all files starting with 'vol'
+
+How to MASK one image with another (i.e. get overlapping region):
+>> fslmaths original_volume.nii.gz -mas mask.nii.gz name_of_output
+
+How to make binary MASK (only 0 and 1):
+>> fslmaths original_volume.nii.gz -mas mask.nii.gz -bin name_of_output
+
+How to get an ROI from a structural Atlas (ex. MNI)
+>> fslroi MNI-prob-1mm.nii.gz output_volume label_number 1
+OR for label 81…
+>> fslmaths Juelich-maxprob-thr50-2mm.nii.gz -thr 81 V1_Left_50-100.nii.gz
+>> fslmaths V1_Left_50-100.nii.gz -uthr 81 V1_Left_50-100.nii.gz
+
+How to add two ROIs together:
+>> fslmaths first_volume.nii.gz -add second_volume.nii.gz output_volume
+
+How to get a new image by thresholding (ex. take a significant cluster as ROI from randomise):
+>> fslmaths first_volume.nii.gz -thr 0.95 output_volume
+
+How to get a mask and apply thresholding
+>> fslmaths first_volume.gz -mas mask.nii.gz -thr 2.3 output_volume
+
+How to find out the mean intensity value for the newly made ROI:
+>> fslstats new_roi.nii.gz -M
+
+How to get an output of clusters in a table in mm coords
+>> cluster -i tfce_corrp_tstat -t 0.95 --mm
+
+How to find out the center of gravity (COG) of a cluster in mm coords
+>> fslstats input.nii.gz -c
+
+Output a certain number of local maximum in mm coords to a text file:
+>> cluster -i thresh_zstat1.nii.gz -t 2.3 --mm --num=10 --olmax=local_maximum_thresh_zstat1.txt
+
+How to get a cluster mask with the number of voxels in each cluster as the values per cluster and a cluster table:
+>> cluster -i thresh_zstat1.nii.gz -t 2.3 -o cluster_index --osize=cluster_size > cluster_info.txt
+
+To extract cluster number 2 from a cluster mask:
+>> fslmaths cluster_mask_zstat1.nii.gz -thr 2 -uthr 2 -bin output_cluster.nii.gz
+
+How to cut an ROI in 2 hemispheres in MNI space (2mm):
+>> fslroi volume_to_cut.nii.gz output_volume 45 90 0 108 0 90 (Left Hemisphere)
+>> fslroi volume_to_cut.nii.gz output_volume 0 45 0 108 0 90 (Right Hemisphere)
+ owever, the size of this space is 1/2 standard space.
+
+To KEEP the hemisphere in the whole brain standard space, instead do (2mm):
+>> fslmaths volume_to_cut.nii.gz -roi 45.5 90 0 109 0 91 0 1 left_output_volume
+>> fslmaths volume_to_cut.nii.gz -roi 0 45.5 0 109 0 91 0 1 right_output_volume
+
+Split hemispheres in 1mm MNI space:
+>> fslmaths volume_to_cut.nii.gz -roi 90.5 181 0 217 0 181 0 1 left_output_volume
+>> fslmaths volume_to_cut.nii.gz -roi 0 90.5 0 217 0 181 0 1 right_output_volume
+ 
+Creating a spherical ROI using fslmaths
+>> fslmaths $FSLDIR/data/standard/MNI152_T1_2mm -mul 0 -add 1 -roi 50 1 50 1 50 1 0 1 point -odt float
+>> fslmaths point -kernel sphere 9 -fmean sphereres -odt float
+Note that in the first command "-mul 0 -add 1" to make sure that the whole image is full of zeros before adding one to the ROI.
+
+Reorient or turn an image to match the orientation of the StandardTemplate
+>> fslreorient2std orig.nii.gz output.nii.gz
+
+Get dimension and header info
+>> fslhd image.nii.gz
+>> fslval image.nii.gz pixdim1 
+voxel size of dimension1
+>> fslval image.nii.gz dim1
+number of voxels in dimension1, volumes for dimension4
+
+Covert from hdr/img format to nii.gz (hdr and img files must be in the same folder)
+>> fslchfiletype NIFTI_GZ infile.img outfile.nii.gz
+Replace NaNs with zeros
+>> fslmaths outfile.nii.gz -nan outfile.nii.gz
