@@ -87,3 +87,9 @@ Covert from hdr/img format to nii.gz (hdr and img files must be in the same fold
 >> fslchfiletype NIFTI_GZ infile.img outfile.nii.gz
 Replace NaNs with zeros
 >> fslmaths outfile.nii.gz -nan outfile.nii.gz
+
+Generate a spherical ROI around XYZ coordinates with radius of W mm
+XYZ = 24,25,12
+W = 10 mm
+>> fslmaths input.nii.gz -roi 24 1 25 1 12 1 01 single_point.nii.gz
+>> fslmaths single_point.nii.gz -kernel sphere 5 -fmean -bin sphere_10mm.nii.gz -odt float
