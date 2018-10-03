@@ -17,10 +17,10 @@ How to remove volumes from somefile.nii.gz and remerge:
 fslmerge -> t stands for merge in time, and vol* means all files starting with 'vol'
 
 How to MASK one image with another (i.e. get overlapping region):
->> fslmaths original_volume.nii.gz -mas mask.nii.gz name_of_output
+>> fslmaths first_volume.nii.gz -mas second_volume.nii.gz name_of_output
 
 How to make binary MASK (only 0 and 1):
->> fslmaths original_volume.nii.gz -mas mask.nii.gz -bin name_of_output
+>> fslmaths first_volume.nii.gz -mas second_volume.nii.gz -bin name_of_output
 
 How to get an ROI from a structural Atlas (ex. MNI)
 >> fslroi MNI-prob-1mm.nii.gz output_volume label_number 1
@@ -35,7 +35,7 @@ How to get a new image by thresholding (ex. take a significant cluster as ROI fr
 >> fslmaths first_volume.nii.gz -thr 0.95 output_volume
 
 How to get a mask and apply thresholding
->> fslmaths first_volume.gz -mas mask.nii.gz -thr 2.3 output_volume
+>> fslmaths first_volume.gz -mas second_volume.nii.gz -thr 2.3 output_volume
 
 How to find out the mean intensity value for the newly made ROI:
 >> fslstats new_roi.nii.gz -M
@@ -72,6 +72,11 @@ Creating a spherical ROI using fslmaths
 >> fslmaths $FSLDIR/data/standard/MNI152_T1_2mm -mul 0 -add 1 -roi 50 1 50 1 50 1 0 1 point -odt float
 >> fslmaths point -kernel sphere 9 -fmean sphereres -odt float
 Note that in the first command "-mul 0 -add 1" to make sure that the whole image is full of zeros before adding one to the ROI.
+Example 2 Generate a spherical ROI around XYZ coordinates with radius of W mm
+XYZ = 24,25,12
+W = 10 mm
+>> fslmaths input.nii.gz -roi 24 1 25 1 12 1 01 single_point.nii.gz
+>> fslmaths single_point.nii.gz -kernel sphere 5 -fmean -bin sphere_10mm.nii.gz -odt float
 
 Reorient or turn an image to match the orientation of the StandardTemplate
 >> fslreorient2std orig.nii.gz output.nii.gz
@@ -87,9 +92,3 @@ Covert from hdr/img format to nii.gz (hdr and img files must be in the same fold
 >> fslchfiletype NIFTI_GZ infile.img outfile.nii.gz
 Replace NaNs with zeros
 >> fslmaths outfile.nii.gz -nan outfile.nii.gz
-
-Generate a spherical ROI around XYZ coordinates with radius of W mm
-XYZ = 24,25,12
-W = 10 mm
->> fslmaths input.nii.gz -roi 24 1 25 1 12 1 01 single_point.nii.gz
->> fslmaths single_point.nii.gz -kernel sphere 5 -fmean -bin sphere_10mm.nii.gz -odt float
