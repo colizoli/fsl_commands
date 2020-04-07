@@ -98,9 +98,11 @@ Covert from hdr/img format to nii.gz (hdr and img files must be in the same fold
 Replace NaNs with zeros
 >> fslmaths outfile.nii.gz -nan outfile.nii.gz
 
-Transforming from volumetric to surface space (Freesurfer):
+Transforming from volumetric (MNI152) to surface space (fsaverage, Freesurfer):
 fsaverage is the MNI equivalent of the inflated brain. 
 By default, Freesurfer uses a 1mm MNI152 space to project to fsaverage. 
 Therefore, if your e.g. ROIs are in MNI152-2mm space, first upsample to 1mm before converting to the fsaverage space.
+Make sure to check the Overlay configuration in tksurfer if you do not see your Overlay!
 >> mri_vol2vol --mov roi.nii.gz --targ $FSLDIR/data/standard/MNI152_T1_1mm_brain.nii.gz --regheader --o roi_1mm.nii.gz --interp nearest
->> mri_vol2surf --mov roi_1mm.nii.gz --mni152reg --hemi rh --surf white --o rh.roi.mgh
+>> mri_vol2surf --src roi_1mm.nii.gz --out roi.mgh --hemi rh --mni152reg
+
