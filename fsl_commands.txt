@@ -101,6 +101,6 @@ Replace NaNs with zeros
 Transforming from volumetric to surface space (Freesurfer):
 fsaverage is the MNI equivalent of the inflated brain. 
 By default, Freesurfer uses a 1mm MNI152 space to project to fsaverage. 
-Therefore, if your e.g. ROIs are in MNI152-2mm space, first upsample to 1mm before coverting to the fsaverage space.
+Therefore, if your e.g. ROIs are in MNI152-2mm space, first upsample to 1mm before converting to the fsaverage space.
 >> mri_vol2vol --mov roi.nii.gz --targ $FSLDIR/data/standard/MNI152_T1_1mm_brain.nii.gz --regheader --o roi_1mm.nii.gz --interp nearest
 >> mri_vol2surf --mov roi_1mm.nii.gz --mni152reg --hemi rh --surf white --o rh.roi.mgh
