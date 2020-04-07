@@ -22,6 +22,10 @@ How to MASK one image with another (i.e. get overlapping region):
 How to make binary MASK (only 0 and 1):
 >> fslmaths first_volume.nii.gz -mas second_volume.nii.gz -bin name_of_output
 
+Atlases and Standard brain images are stored (on a Mac) here:
+usr/local/fsl/data/atlases 
+usr/local/fsl/data/standard
+
 How to get an ROI from a structural Atlas (ex. MNI)
 >> fslroi MNI-prob-1mm.nii.gz output_volume label_number 1
 OR for label 81…
@@ -93,10 +97,6 @@ Covert from hdr/img format to nii.gz (hdr and img files must be in the same fold
 >> fslchfiletype NIFTI_GZ infile.img outfile.nii.gz
 Replace NaNs with zeros
 >> fslmaths outfile.nii.gz -nan outfile.nii.gz
-
-Atlases and Standard brain images are stored (on a Mac) here:
-usr/local/fsl/data/atlases 
-usr/local/fsl/data/standard
 
 Transforming from volumetric to surface space (Freesurfer):
 fsaverage is the MNI equivalent of the inflated brain. 
