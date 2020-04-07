@@ -93,3 +93,12 @@ Covert from hdr/img format to nii.gz (hdr and img files must be in the same fold
 >> fslchfiletype NIFTI_GZ infile.img outfile.nii.gz
 Replace NaNs with zeros
 >> fslmaths outfile.nii.gz -nan outfile.nii.gz
+
+Atlases and Standard brain images are stored (on a Mac) here:
+usr/local/fsl/data/atlases 
+usr/local/fsl/data/standard
+
+Transforming from volumetric to surface space (Freesurfer):
+fsaverage is the MNI equivalent of the inflated brain. 
+By default, Freesurfer uses a 1mm MNI152 space to project to fsaverage. 
+Therefore, if your e.g. ROIs are in MNI152-2mm space, first upsample to 1mm before coverting to the fsaverage space.
