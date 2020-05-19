@@ -60,9 +60,9 @@ To extract cluster number 2 from a cluster mask:
 >> fslmaths cluster_mask_zstat1.nii.gz -thr 2 -uthr 2 -bin output_cluster.nii.gz
 
 How to cut an ROI in 2 hemispheres in MNI space (2mm):
+However, CAREFUL! the size of this space is 1/2 standard space.
 >> fslroi volume_to_cut.nii.gz output_volume 45 90 0 108 0 90 (Left Hemisphere)
 >> fslroi volume_to_cut.nii.gz output_volume 0 45 0 108 0 90 (Right Hemisphere)
-However, the size of this space is 1/2 standard space.
 
 To KEEP the hemisphere in the whole brain standard space, instead do (2mm):
 >> fslmaths volume_to_cut.nii.gz -roi 45.5 90 0 109 0 91 0 1 left_output_volume
